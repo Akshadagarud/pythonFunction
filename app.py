@@ -41,7 +41,7 @@ end_date = None
 interval_type =None
 
 start_date = st.date_input("Start date",start_date)
-end_date = st.date_input("End date".end_date)
+end_date = st.date_input("End date",end_date)
 interval_type = st.selectbox("Select interval type", ['monthly', 'quarterly', 'half_yearly', 'yearly'],interval_type)
 
 if st.button("Calculate Intreval"):
