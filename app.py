@@ -85,5 +85,5 @@ def main():
     else:
         st.write("Please select both start and end dates.")
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     main()
