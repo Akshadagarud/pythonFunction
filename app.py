@@ -1,5 +1,5 @@
 import streamlit as st
-from datetime import datetime, timedelta
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 def calculate_intervals(start_date, end_date):
@@ -13,41 +13,36 @@ def calculate_intervals(start_date, end_date):
         'yearly': []
     }
 
-    # Calculate monthly intervals
     current_date = start_date
+
+    # Calculate monthly intervals
     while current_date <= end_date:
-        next_date = current_date + relativedelta(months=1, days=-1)
-        if next_date > end_date:
-            next_date = end_date
-        intervals['monthly'].append((current_date, next_date))
-        current_date = current_date + relativedelta(months=1)
+        next_month_end = min(current_date + relativedelta(months=1, day=1) - relativedelta(days=1), end_date)
+        intervals['monthly'].append((current_date, next_month_end))
+        current_date = next_month_end + relativedelta(days=1)
+
+    current_date = start_date
 
     # Calculate quarterly intervals
-    current_date = start_date
     while current_date <= end_date:
-        next_date = current_date + relativedelta(months=3, days=-1)
-        if next_date > end_date:
-            next_date = end_date
-        intervals['quarterly'].append((current_date, next_date))
-        current_date = current_date + relativedelta(months=3)
+        next_quarter_end = min(current_date + relativedelta(months=3, day=1) - relativedelta(days=1), end_date)
+        intervals['quarterly'].append((current_date, next_quarter_end))
+        current_date = next_quarter_end + relativedelta(days=1)
+
+    current_date = start_date
 
     # Calculate half-yearly intervals
-    current_date = start_date
     while current_date <= end_date:
-        next_date = current_date + relativedelta(months=6, days=-1)
-        if next_date > end_date:
-            next_date = end_date
-        intervals['half_yearly'].append((current_date, next_date))
-        current_date = current_date + relativedelta(months=6)
+        next_half_year_end = min(current_date + relativedelta(months=6, day=1) - relativedelta(days=1), end_date)
+        intervals['half_yearly'].append((current_date, next_half_year_end))
+        current_date = next_half_year_end + relativedelta(days=1)
 
     # Calculate yearly intervals
     current_date = start_date
     while current_date <= end_date:
-        next_date = current_date + relativedelta(years=1, days=-1)
-        if next_date > end_date:
-            next_date = end_date
-        intervals['yearly'].append((current_date, next_date))
-        current_date = current_date + relativedelta(years=1)
+        next_year_end = min(current_date + relativedelta(years=1, day=1) - relativedelta(days=1), end_date)
+        intervals['yearly'].append((current_date, next_year_end))
+        current_date = next_year_end + relativedelta(days=1)
 
     return intervals
 
