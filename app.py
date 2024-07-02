@@ -32,22 +32,28 @@ def calculate_intervals(start_date, end_date):
         current_date = next_date
 
     # Calculate half-yearly intervals
-    current_date = start_date
-    while current_date < end_date:
-        next_date = current_date + relativedelta(months=6)
-        if next_date > end_date:
-            next_date = end_date
-        intervals['half_yearly'].append((current_date, next_date - timedelta(days=1)))
-        current_date = next_date
+    if (end_date - start_date).days >= 6 * 30:
+        current_date = start_date
+        while current_date < end_date:
+            next_date = current_date + relativedelta(months=6)
+            if next_date > end_date:
+                next_date = end_date
+            intervals['half_yearly'].append((current_date, next_date - timedelta(days=1)))
+            current_date = next_date
+    else:
+        intervals['half_yearly'] = []
 
     # Calculate yearly intervals
-    current_date = start_date
-    while current_date < end_date:
-        next_date = current_date + relativedelta(years=1)
-        if next_date > end_date:
-            next_date = end_date
-        intervals['yearly'].append((current_date, next_date - timedelta(days=1)))
-        current_date = next_date
+    if (end_date - start_date).days >= 365:
+        current_date = start_date
+        while current_date < end_date:
+            next_date = current_date + relativedelta(years=1)
+            if next_date > end_date:
+                next_date = end_date
+            intervals['yearly'].append((current_date, next_date - timedelta(days=1)))
+            current_date = next_date
+    else:
+        intervals['yearly'] = []
 
     return intervals
 
@@ -61,6 +67,9 @@ def main():
     if start_date and end_date:
         start_date_str = start_date.strftime('%Y-%m-%d')
         end_date_str = end_date.strftime('%Y-%m-%d')
+
+        st.write(f"Start Date: {start_date_str}")
+        st.write(f"End Date: {end_date_str}")
 
         if st.button("Calculate Intervals"):
             intervals = calculate_intervals(start_date_str, end_date_str)
@@ -76,5 +85,5 @@ def main():
     else:
         st.write("Please select both start and end dates.")
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     main()
