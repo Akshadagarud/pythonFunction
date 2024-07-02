@@ -55,11 +55,11 @@ def main():
     st.title("Time Interval Calculator")
     st.write("Calculate monthly, quarterly, half-yearly, and yearly intervals.")
 
-    start_date = st.date_input("Start Date", datetime.now())
-    end_date = st.date_input("End Date", datetime.now() + relativedelta(months=1))
+    start_date = st.date_input("Start Date", datetime.now()).strftime('%Y-%m-%d')
+    end_date = st.date_input("End Date", datetime.now() + relativedelta(months=1)).strftime('%Y-%m-%d')
 
     if st.button("Calculate Intervals"):
-        intervals = calculate_intervals(start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'))
+        intervals = calculate_intervals(start_date, end_date)
         
         for key, value in intervals.items():
             st.write(f"{key.capitalize()} intervals:")
