@@ -93,5 +93,3 @@ def main():
                 st.write(f"Start: {interval[0].strftime('%Y-%m-%d')}, End: {interval[1].strftime('%Y-%m-%d')}")
             st.write()
 
-if _name_ == "_main_":
-    main()
