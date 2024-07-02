@@ -55,20 +55,26 @@ def main():
     st.title("Time Interval Calculator")
     st.write("Calculate monthly, quarterly, half-yearly, and yearly intervals.")
 
-    start_date = st.date_input("Start Date", datetime.now()).strftime('%Y-%m-%d')
-    end_date = st.date_input("End Date", datetime.now() + relativedelta(months=1)).strftime('%Y-%m-%d')
+    start_date = st.date_input("Start Date", value=None)
+    end_date = st.date_input("End Date", value=None)
 
-    if st.button("Calculate Intervals"):
-        intervals = calculate_intervals(start_date, end_date)
-        
-        for key, value in intervals.items():
-            st.write(f"{key.capitalize()} intervals:")
-            if value:
-                for interval in value:
-                    st.write(f"Start: {interval[0].strftime('%Y-%m-%d')}, End: {interval[1].strftime('%Y-%m-%d')}")
-            else:
-                st.write("No data")
-            st.write()
+    if start_date and end_date:
+        start_date_str = start_date.strftime('%Y-%m-%d')
+        end_date_str = end_date.strftime('%Y-%m-%d')
 
-if __name__ == "__main__":
+        if st.button("Calculate Intervals"):
+            intervals = calculate_intervals(start_date_str, end_date_str)
+            
+            for key, value in intervals.items():
+                st.write(f"{key.capitalize()} intervals:")
+                if value:
+                    for interval in value:
+                        st.write(f"Start: {interval[0].strftime('%Y-%m-%d')}, End: {interval[1].strftime('%Y-%m-%d')}")
+                else:
+                    st.write("No data")
+                st.write()
+    else:
+        st.write("Please select both start and end dates.")
+
+if _name_ == "_main_":
     main()
