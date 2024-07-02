@@ -1,12 +1,6 @@
 import streamlit as st
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
-from supabase import create_client, Client
-
-# Initialize Supabase client
-url =st.secrets["SUPABASE_URL"]
-key =st.secrets["SUPABASE_KEY"]
-supabase: Client = create_client(url, key)
 
 def calculate_intervals(start_date, end_date):
     start_date = datetime.strptime(start_date, '%Y-%m-%d')
@@ -57,19 +51,6 @@ def calculate_intervals(start_date, end_date):
 
     return intervals
 
-def save_to_supabase(intervals):
-    data = []
-    for period_type, period_list in intervals.items():
-        for interval in period_list:
-            data.append({
-                "period_type": period_type,
-                "start_date": interval[0].strftime('%Y-%m-%d'),
-                "end_date": interval[1].strftime('%Y-%m-%d')
-            })
-
-    response = supabase.table('intervals').insert(data).execute()
-    return response
-
 def main():
     st.title("Time Interval Calculator")
     st.write("Calculate monthly, quarterly, half-yearly, and yearly intervals.")
@@ -80,16 +61,11 @@ def main():
     if st.button("Calculate Intervals"):
         intervals = calculate_intervals(start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'))
         
-        if st.checkbox("Save to Supabase"):
-            response = save_to_supabase(intervals)
-            if response.status_code == 201:
-                st.success("Intervals saved to Supabase successfully!")
-            else:
-                st.error("Failed to save intervals to Supabase.")
-        
         for key, value in intervals.items():
             st.write(f"{key.capitalize()} intervals:")
             for interval in value:
                 st.write(f"Start: {interval[0].strftime('%Y-%m-%d')}, End: {interval[1].strftime('%Y-%m-%d')}")
             st.write()
 
+if _name_ == "_main_":
+    main()
