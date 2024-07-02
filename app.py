@@ -32,8 +32,8 @@ def calculate_intervals(start_date, end_date):
         current_date = next_date
 
     # Calculate half-yearly intervals
-    if (end_date - start_date).days >= 6 * 30:
-        current_date = start_date
+    current_date = start_date
+    if (end_date - start_date).days >= 6 * 30:  # Approximately 6 months
         while current_date < end_date:
             next_date = current_date + relativedelta(months=6)
             if next_date > end_date:
@@ -44,8 +44,8 @@ def calculate_intervals(start_date, end_date):
         intervals['half_yearly'] = []
 
     # Calculate yearly intervals
+    current_date = start_date
     if (end_date - start_date).days >= 365:
-        current_date = start_date
         while current_date < end_date:
             next_date = current_date + relativedelta(years=1)
             if next_date > end_date:
@@ -84,6 +84,7 @@ def main():
                 st.write()
     else:
         st.write("Please select both start and end dates.")
+
 
 if __name__ == "__main__":
     main()
