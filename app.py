@@ -36,12 +36,12 @@ def calculate_time_intervals(start_date, end_date, interval_type):
 
 st.title("Date Calculator [Monthly Quaterly Half-Yearly Yearly]")
 start_date = st.date_input("Start date")
-end_date = st.date_input("Select end date")
+end_date = st.date_input("End date")
 interval_type = st.selectbox("Select interval type", ['monthly', 'quarterly', 'half_yearly', 'yearly'])
 
 if st.button("Calculate Intreval"):
     if start_date > end_date:
-        st.warning("Start date cannot be greater than end date. Please select a valid date range.")
+        st.warning("Start date cannot be greater than end date. Enter a valid date range.")
     else:
         intervals = calculate_time_intervals(start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'), interval_type)
         st.write(f"Intervals of {interval_type} type:")
