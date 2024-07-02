@@ -15,45 +15,39 @@ def calculate_intervals(start_date, end_date):
 
     # Calculate monthly intervals
     current_date = start_date
-    while current_date < end_date:
-        next_date = current_date + relativedelta(months=1)
+    while current_date <= end_date:
+        next_date = current_date + relativedelta(months=1, days=-1)
         if next_date > end_date:
             next_date = end_date
-        intervals['monthly'].append((current_date, next_date - timedelta(days=1)))
-        current_date = next_date
+        intervals['monthly'].append((current_date, next_date))
+        current_date = current_date + relativedelta(months=1)
 
     # Calculate quarterly intervals
     current_date = start_date
-    while current_date < end_date:
-        next_date = current_date + relativedelta(months=3)
+    while current_date <= end_date:
+        next_date = current_date + relativedelta(months=3, days=-1)
         if next_date > end_date:
             next_date = end_date
-        intervals['quarterly'].append((current_date, next_date - timedelta(days=1)))
-        current_date = next_date
+        intervals['quarterly'].append((current_date, next_date))
+        current_date = current_date + relativedelta(months=3)
 
     # Calculate half-yearly intervals
-    if (end_date - start_date).days >= 6 * 30:  # Approximately 6 months
-        current_date = start_date
-        while current_date < end_date:
-            next_date = current_date + relativedelta(months=6)
-            if next_date > end_date:
-                next_date = end_date
-            intervals['half_yearly'].append((current_date, next_date - timedelta(days=1)))
-            current_date = next_date
-    else:
-        intervals['half_yearly'] = []
+    current_date = start_date
+    while current_date <= end_date:
+        next_date = current_date + relativedelta(months=6, days=-1)
+        if next_date > end_date:
+            next_date = end_date
+        intervals['half_yearly'].append((current_date, next_date))
+        current_date = current_date + relativedelta(months=6)
 
     # Calculate yearly intervals
-    if (end_date - start_date).days >= 365:
-        current_date = start_date
-        while current_date < end_date:
-            next_date = current_date + relativedelta(years=1)
-            if next_date > end_date:
-                next_date = end_date
-            intervals['yearly'].append((current_date, next_date - timedelta(days=1)))
-            current_date = next_date
-    else:
-        intervals['yearly'] = []
+    current_date = start_date
+    while current_date <= end_date:
+        next_date = current_date + relativedelta(years=1, days=-1)
+        if next_date > end_date:
+            next_date = end_date
+        intervals['yearly'].append((current_date, next_date))
+        current_date = current_date + relativedelta(years=1)
 
     return intervals
 
