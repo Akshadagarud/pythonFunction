@@ -1,78 +1,49 @@
 import streamlit as st
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
+from datetime import datetime, timedelta
 
-def calculate_intervals(start_date, end_date):
+def calculate_time_intervals(start_date, end_date, interval_type):
     start_date = datetime.strptime(start_date, '%Y-%m-%d')
     end_date = datetime.strptime(end_date, '%Y-%m-%d')
 
-    intervals = {
-        'monthly': [],
-        'quarterly': [],
-        'half_yearly': [],
-        'yearly': []
-    }
+    intervals = []
 
-    current_date = start_date
+    if interval_type == 'monthly':
+        current_date = start_date
+        while current_date <= end_date:
+            next_month = (current_date.replace(day=1) + timedelta(days=32)).replace(day=1)
+            intervals.append((current_date.strftime('%Y-%m-%d'), (next_month - timedelta(days=1)).strftime('%Y-%m-%d')))
+            current_date = next_month
 
-    # Calculate monthly intervals
-    while current_date <= end_date:
-        next_month_end = min(current_date + relativedelta(months=1, day=1) - relativedelta(days=1), end_date)
-        intervals['monthly'].append((current_date, next_month_end))
-        current_date = next_month_end + relativedelta(days=1)
+    elif interval_type == 'quarterly':
+        current_date = start_date
+        while current_date <= end_date:
+            intervals.append((current_date.strftime('%Y-%m-%d'), (current_date + timedelta(days=90)).strftime('%Y-%m-%d')))
+            current_date = current_date + timedelta(days=90)
 
-    current_date = start_date
+    elif interval_type == 'half_yearly':
+        current_date = start_date
+        while current_date <= end_date:
+            intervals.append((current_date.strftime('%Y-%m-%d'), (current_date + timedelta(days=180)).strftime('%Y-%m-%d')))
+            current_date = current_date + timedelta(days=180)
 
-    # Calculate quarterly intervals
-    while current_date <= end_date:
-        next_quarter_end = min(current_date + relativedelta(months=3, day=1) - relativedelta(days=1), end_date)
-        intervals['quarterly'].append((current_date, next_quarter_end))
-        current_date = next_quarter_end + relativedelta(days=1)
-
-    current_date = start_date
-
-    # Calculate half-yearly intervals
-    while current_date <= end_date:
-        next_half_year_end = min(current_date + relativedelta(months=6, day=1) - relativedelta(days=1), end_date)
-        intervals['half_yearly'].append((current_date, next_half_year_end))
-        current_date = next_half_year_end + relativedelta(days=1)
-
-    # Calculate yearly intervals
-    current_date = start_date
-    while current_date <= end_date:
-        next_year_end = min(current_date + relativedelta(years=1, day=1) - relativedelta(days=1), end_date)
-        intervals['yearly'].append((current_date, next_year_end))
-        current_date = next_year_end + relativedelta(days=1)
+    elif interval_type == 'yearly':
+        current_date = start_date
+        while current_date <= end_date:
+            intervals.append((current_date.strftime('%Y-%m-%d'), (current_date + timedelta(days=365)).strftime('%Y-%m-%d')))
+            current_date = current_date + timedelta(days=365)
 
     return intervals
 
-def main():
-    st.title("Time Interval Calculator")
-    st.write("Calculate monthly, quarterly, half-yearly, and yearly intervals.")
+st.title("Date Calculator")
+start_date = st.date_input("Select start date")
+end_date = st.date_input("Select end date")
+interval_type = st.selectbox("Select interval type", ['monthly', 'quarterly', 'half_yearly', 'yearly'])
 
-    start_date = st.date_input("Start Date", value=None)
-    end_date = st.date_input("End Date", value=None)
-
-    if start_date and end_date:
-        start_date_str = start_date.strftime('%Y-%m-%d')
-        end_date_str = end_date.strftime('%Y-%m-%d')
-
-        if st.button("Calculate Intervals"):
-            intervals = calculate_intervals(start_date_str, end_date_str)
-            
-            st.write(f"Start Date: {start_date_str}")
-            st.write(f"End Date: {end_date_str}")
-            
-            for key, value in intervals.items():
-                st.write(f"{key.capitalize()} intervals:")
-                if value:
-                    for interval in value:
-                        st.write(f"Start: {interval[0].strftime('%Y-%m-%d')}, End: {interval[1].strftime('%Y-%m-%d')}")
-                else:
-                    st.write("No data")
-                st.write()
+if st.button("Calculate"):
+    if start_date > end_date:
+        st.warning("Start date cannot be greater than end date. Please select a valid date range.")
     else:
-        st.write("Please select both start and end dates.")
-
-if __name__ == "__main__":
-    main()
+        intervals = calculate_time_intervals(start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'), interval_type)
+        st.write(f"Intervals of {interval_type} type:")
+        for interval in intervals:
+            st.write(f"From {interval[0]} to {interval[1]}")
