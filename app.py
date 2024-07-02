@@ -35,6 +35,11 @@ def calculate_time_intervals(start_date, end_date, interval_type):
     return intervals
 
 st.title("Date Calculator [Monthly Quaterly Half-Yearly Yearly]")
+
+start_date = None
+end_date = None
+interval_type =None
+
 start_date = st.date_input("Start date")
 end_date = st.date_input("End date")
 interval_type = st.selectbox("Select interval type", ['monthly', 'quarterly', 'half_yearly', 'yearly'])
