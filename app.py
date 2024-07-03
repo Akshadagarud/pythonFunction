@@ -9,8 +9,6 @@ def calculate_time_intervals(start_date, end_date, interval_type):
 
     intervals = []
 
-   intervals = []
-
     if interval_type == 'monthly':
         current_date = start_date
         while current_date <= end_date:
