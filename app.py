@@ -82,4 +82,4 @@ if st.button("Calculate Intreval"):
         else:
             st.write(f"Intervals of {interval_type} type:")
         for interval in intervals:
-            st.write(f"Start date : {interval[0]}  ::  End date : {interval[1]}")
+            st.write(f"Start date : {interval[0]}   ::   End date : {interval[1]}")
