@@ -48,7 +48,7 @@ def calculate_time_intervals(start_date, end_date, interval_type):
             current_date = next_half_year
 
 
-     elif interval_type == 'yearly':
+    elif interval_type == 'yearly':
         current_date = start_date
         while current_date <= end_date:
             next_year = current_date + relativedelta(years=1)
