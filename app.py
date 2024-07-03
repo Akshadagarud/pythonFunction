@@ -26,7 +26,7 @@ def calculate_time_intervals(start_date, end_date, interval_type):
         current_date = start_date
         while current_date <= end_date:
            next_quarter = current_date + relativedelta(months=3)
-            if next_quarter > end_date:
+           if next_quarter > end_date:
                 if (current_date.month - 1) // 3 != (end_date.month - 1) // 3 or current_date.year != end_date.year:
                     intervals.append((current_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d')))
                 break
